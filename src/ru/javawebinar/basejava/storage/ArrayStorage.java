@@ -1,19 +1,31 @@
-package ru.basejava.storage;
+package ru.javawebinar.basejava.storage;
 
-import ru.basejava.model.Resume;
+import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage {
-    private Resume[] storage = new Resume[10_000];
-    private int size;
+public class ArrayStorage implements Storage{
+
+    private static final int STORAGE_LIMIT = 10_000;
+
+    private Resume[] storage = new Resume[STORAGE_LIMIT];
+    private int size = 0;
 
     public void clear() {
         Arrays.fill(storage, 0, size - 1, null);
         size = 0;
+    }
+
+    public void update(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        if (index != -1) {
+            storage[index] = resume;
+        } else {
+            System.out.println("The resume not found.");
+        }
     }
 
     public void save(Resume resume) {
@@ -26,15 +38,6 @@ public class ArrayStorage {
             }
         } else {
             System.out.println("The storage is full.");
-        }
-    }
-
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index != -1) {
-            storage[index] = resume;
-        } else {
-            System.out.println("The resume not found.");
         }
     }
 
