@@ -1,13 +1,14 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
+
 import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
  */
 public abstract class AbstractArrayStorage implements Storage {
-    protected static final int STORAGE_LIMIT = 10_000;
+    protected static final int STORAGE_LIMIT = 3;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
@@ -16,21 +17,21 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public void clear() {
-        if (size > 0) {
-            Arrays.fill(storage, 0, size - 1, null);
-            size = 0;
-        }
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
+
     }
 
-    public void save(Resume resume){
-        if (size < storage.length) {
+    public void save(Resume resume) {
+        if (size < STORAGE_LIMIT) {
             int index = getIndex(resume.getUuid());
-            if (index < 0){
+            if (index < 0) {
                 insert(resume, index);
+                size++;
             } else {
                 System.out.println("The resume is already present.");
             }
-        }else {
+        } else {
             System.out.println("The storage is full.");
         }
     }
@@ -57,12 +58,13 @@ public abstract class AbstractArrayStorage implements Storage {
         return Arrays.copyOf(storage, size);
     }
 
-    public void delete(String uuid){
+    public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
             System.out.println("The resume not found.");
         } else {
             remove(index);
+            storage[--size] = null;
         }
     }
 
