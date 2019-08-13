@@ -8,29 +8,15 @@ import ru.javawebinar.basejava.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void save(Resume resume) {
-        if (size < storage.length) {
-            int index = getIndex(resume.getUuid());
-            if (index != -1) {
-                System.out.println("The resume is already present.");
-            } else {
-                storage[size++] = resume;
-            }
-        } else {
-            System.out.println("The storage is full.");
-        }
+    protected void insert(Resume resume, int index) {
+        storage[size++] = resume;
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index != -1) {
-            size--;
-            storage[index] = storage[size];
-            storage[size] = null;
-        } else {
-            System.out.println("The resume not found.");
-        }
+    protected void remove(int index) {
+        size--;
+        storage[index] = storage[size];
+        storage[size] = null;
     }
 
     @Override

@@ -6,29 +6,15 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void save(Resume resume) {
-        if (size < storage.length) {
-            int searchResult = getIndex(resume.getUuid());
-            if (searchResult >= 0) {
-                System.out.println("The resume is already present.");
-                return;
-            }
-            int index = - 1 - searchResult;
-            System.arraycopy(storage, index, storage, index + 1, size - index);
-            storage[index] = resume;
-            size++;
-        } else {
-            System.out.println("The storage is full.");
-        }
+    protected void insert(Resume resume, int index) {
+        int insertPosition = - 1 - index;
+        System.arraycopy(storage, insertPosition, storage, insertPosition + 1, size - insertPosition);
+        storage[insertPosition] = resume;
+        size++;
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            System.out.println("The resume not found.");
-            return;
-        }
+    protected void remove(int index) {
         System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
         storage[--size] = null;
     }
