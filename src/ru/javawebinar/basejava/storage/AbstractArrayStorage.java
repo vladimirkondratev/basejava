@@ -1,5 +1,8 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
+import ru.javawebinar.basejava.exception.NotExistStorageException;
+import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
@@ -19,7 +22,22 @@ public abstract class AbstractArrayStorage implements Storage {
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
+    }
 
+    public void update(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        if (index >= 0) {
+            storage[index] = resume;
+        } else {
+            throw new NotExistStorageException(resume.getUuid());
+        }
+    }
+
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, size);
     }
 
     public void save(Resume resume) {
@@ -29,19 +47,20 @@ public abstract class AbstractArrayStorage implements Storage {
                 insert(resume, index);
                 size++;
             } else {
-                System.out.println("The resume is already present.");
+                throw new ExistStorageException(resume.getUuid());
             }
         } else {
-            System.out.println("The storage is full.");
+            throw new StorageException("Storage overflow", resume.getUuid());
         }
     }
 
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            storage[index] = resume;
+    public void delete(String uuid) {
+        int index = getIndex(uuid);
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
         } else {
-            System.out.println("The resume not found.");
+            remove(index);
+            storage[--size] = null;
         }
     }
 
@@ -50,22 +69,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             return storage[index];
         }
-        System.out.println("The resume not found.");
-        return null;
-    }
-
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            System.out.println("The resume not found.");
-        } else {
-            remove(index);
-            storage[--size] = null;
-        }
+        throw new NotExistStorageException(uuid);
     }
 
     protected abstract void insert(Resume resume, int index);
