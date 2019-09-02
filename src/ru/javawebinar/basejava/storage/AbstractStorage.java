@@ -4,29 +4,43 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.Collections;
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
 
+    @Override
     public void save(Resume resume) {
-        Object searchKey = getSearchKeyExistException(resume.getUuid());
+        Object searchKey = getSearchKeyExceptionIfExist(resume.getUuid());
         doSave(resume, searchKey);
     }
 
+    @Override
     public void update(Resume resume) {
-        Object searchKey = getSearchKeyNotExistException(resume.getUuid());
+        Object searchKey = getSearchKeyExceptionIfNotExist(resume.getUuid());
         doUpdate(resume, searchKey);
     }
 
+    @Override
     public void delete(String uuid) {
-        Object searchKey = getSearchKeyNotExistException(uuid);
+        Object searchKey = getSearchKeyExceptionIfNotExist(uuid);
         doDelete(searchKey);
     }
 
+    @Override
     public Resume get(String uuid) {
-        Object searchKey = getSearchKeyNotExistException(uuid);
+        Object searchKey = getSearchKeyExceptionIfNotExist(uuid);
         return doGet(searchKey);
     }
 
-    private Object getSearchKeyNotExistException(String uuid) {
+    @Override
+    public List<Resume> getAllSorted() {
+        List<Resume> resumes = getAll();
+        Collections.sort(resumes);
+        return resumes;
+    }
+
+    private Object getSearchKeyExceptionIfNotExist(String uuid) {
         Object key = getSearchKey(uuid);
         if (!isExist(key)) {
             throw new NotExistStorageException(uuid);
@@ -34,7 +48,7 @@ public abstract class AbstractStorage implements Storage {
         return key;
     }
 
-    private Object getSearchKeyExistException(String uuid) {
+    private Object getSearchKeyExceptionIfExist(String uuid) {
         Object key = getSearchKey(uuid);
         if (isExist(key)) {
             throw new ExistStorageException(uuid);
@@ -54,4 +68,5 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Resume doGet(Object searchKey);
 
+    protected abstract List<Resume> getAll();
 }

@@ -18,14 +18,6 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        Collection<Resume> resumes = storage.values();
-        List<Resume> resumeList = new ArrayList<>(resumes);
-        Collections.sort(resumeList);
-        return resumeList;
-    }
-
-    @Override
     protected Object getSearchKey(String uuid) {
         return uuid;
     }
@@ -53,5 +45,11 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected Resume doGet(Object searchKey) {
         return storage.get(searchKey);
+    }
+
+    @Override
+    protected List<Resume> getAll() {
+        Collection<Resume> resumes = storage.values();
+        return new ArrayList<>(resumes);
     }
 }
