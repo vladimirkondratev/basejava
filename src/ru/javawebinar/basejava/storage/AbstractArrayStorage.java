@@ -39,7 +39,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    public void doSave(Resume resume, Integer searchKey) {
+    protected void doSave(Resume resume, Integer searchKey) {
         if (size < STORAGE_LIMIT) {
             insert(resume, searchKey);
             size++;
@@ -55,7 +55,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    public Resume doGet(Integer searchKey) {
+    protected Resume doGet(Integer searchKey) {
         return storage[searchKey];
     }
 
