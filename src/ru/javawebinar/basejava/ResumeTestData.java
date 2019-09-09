@@ -37,7 +37,7 @@ public class ResumeTestData {
         resume.putSection(SectionType.QUALIFICATIONS, new ListSection("Квалификация", qualificationList));
 
         DateItem experience1 = new DateItem(LocalDate.of(2013, 10, 1),
-                null, "Java Online Projects", "Автор проекта.\n" +
+                LocalDate.now(), "Java Online Projects", "Автор проекта.\n" +
                 "   Создание, организация и проведение Java онлайн проектов и стажировок.");
         DateItem experience2 = new DateItem(LocalDate.of(2014, 10, 1),
                 LocalDate.of(2016, 1, 1), "Wrike", "Старший разработчик (backend)\n" +
