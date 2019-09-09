@@ -1,25 +1,41 @@
 package ru.javawebinar.basejava.model;
 
 import java.util.List;
+import java.util.Objects;
 
-public class DateSection extends Section {
-    private List<DateItem> listItem;
+public class DateSection extends AbstractSection {
+    private List<DateItem> items;
 
-    public DateSection(String title, List<DateItem> listItem) {
+    public DateSection(String title, List<DateItem> items) {
+        Objects.requireNonNull(title, "title must not be null");
+        Objects.requireNonNull(items, "list must not be null");
         this.title = title;
-        this.listItem = listItem;
+        this.items = items;
     }
 
-    public List<DateItem> getListItem() {
-        return listItem;
+    public List<DateItem> getItems() {
+        return items;
     }
 
-    public void setListItem(List<DateItem> listItem) {
-        this.listItem = listItem;
+    public void setItems(List<DateItem> items) {
+        this.items = items;
     }
 
     @Override
     public String toString() {
-        return title + "\n" + listItem;
+        return title + "\n" + items;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DateSection that = (DateSection) o;
+        return items.equals(that.items);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(items);
     }
 }

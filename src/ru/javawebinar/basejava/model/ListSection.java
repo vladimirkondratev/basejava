@@ -1,25 +1,41 @@
 package ru.javawebinar.basejava.model;
 
 import java.util.List;
+import java.util.Objects;
 
-public class ListSection extends Section {
-    private List<String> listItem;
+public class ListSection extends AbstractSection {
+    private List<String> items;
 
-    public ListSection(String title, List<String> listItem) {
+    public ListSection(String title, List<String> items) {
+        Objects.requireNonNull(title, "title must not be null");
+        Objects.requireNonNull(items, "list must not be null");
         this.title = title;
-        this.listItem = listItem;
+        this.items = items;
     }
 
-    public List<String> getListItem() {
-        return listItem;
+    public List<String> getItems() {
+        return items;
     }
 
-    public void setListItem(List<String> listItem) {
-        this.listItem = listItem;
+    public void setItems(List<String> items) {
+        this.items = items;
     }
 
     @Override
     public String toString() {
-        return title + "\n" + listItem;
+        return title + "\n" + items;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ListSection that = (ListSection) o;
+        return items.equals(that.items);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(items);
     }
 }

@@ -12,9 +12,9 @@ public class Resume implements Comparable {
 
     private final String fullName;
 
-    private Map<ContactType, Contact> contacts = new HashMap<>();
+    private Map<ContactType, Contact> contacts = new EnumMap<>(ContactType.class);
 
-    private Map<SectionType, Section> sections = new HashMap<>();
+    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -43,11 +43,11 @@ public class Resume implements Comparable {
         contacts.put(type, new Contact(value));
     }
 
-    public Section getSection(SectionType type) {
+    public AbstractSection getSection(SectionType type) {
         return sections.get(type);
     }
 
-    public void putSection(SectionType type, Section section) {
+    public void putSection(SectionType type, AbstractSection section) {
         sections.put(type, section);
     }
 
@@ -57,12 +57,14 @@ public class Resume implements Comparable {
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
         return uuid.equals(resume.uuid) &&
-                fullName.equals(resume.fullName);
+                fullName.equals(resume.fullName) &&
+                contacts.equals(resume.contacts) &&
+                sections.equals(resume.sections);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName);
+        return Objects.hash(uuid, fullName, contacts, sections);
     }
 
     @Override
