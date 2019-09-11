@@ -29,5 +29,19 @@ public class MainFile {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
+        System.out.println("--------------------------------------");
+        printFileNameRecursion(new File("D:\\java_workspace\\basejava\\"));
+    }
+
+    private static void printFileNameRecursion(File directory) {
+        for (File file : directory.listFiles()) {
+            if (file.isFile()) {
+                System.out.println(file.getName());
+            } else {
+                printFileNameRecursion(file);
+            }
+        }
     }
 }

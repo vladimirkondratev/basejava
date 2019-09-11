@@ -3,21 +3,21 @@ package ru.javawebinar.basejava.model;
 import java.util.List;
 import java.util.Objects;
 
-public class DateSection extends AbstractSection {
-    private List<DateItem> items;
+public class OrganizationSection extends AbstractSection {
+    private List<Organization> items;
 
-    public DateSection(String title, List<DateItem> items) {
+    public OrganizationSection(String title, List<Organization> items) {
         Objects.requireNonNull(title, "title must not be null");
         Objects.requireNonNull(items, "list must not be null");
         this.title = title;
         this.items = items;
     }
 
-    public List<DateItem> getItems() {
+    public List<Organization> getItems() {
         return items;
     }
 
-    public void setItems(List<DateItem> items) {
+    public void setItems(List<Organization> items) {
         this.items = items;
     }
 
@@ -32,7 +32,7 @@ public class DateSection extends AbstractSection {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DateSection that = (DateSection) o;
+        OrganizationSection that = (OrganizationSection) o;
         return items.equals(that.items);
     }
 

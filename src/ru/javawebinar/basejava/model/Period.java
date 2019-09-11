@@ -3,18 +3,16 @@ package ru.javawebinar.basejava.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class DateItem {
-    private Link homepage;
+public class Period {
     private LocalDate startDate;
     private LocalDate endDate;
     private String title;
     private String description;
 
-    public DateItem(String name, String url, LocalDate startDate, LocalDate endDate, String title, String description) {
+    public Period(LocalDate startDate, LocalDate endDate, String title, String description) {
         Objects.requireNonNull(startDate, "start time must not be null");
         Objects.requireNonNull(endDate, "end time must not be null");
         Objects.requireNonNull(title, "title must not be null");
-        this.homepage = new Link(name, url);
         this.startDate = startDate;
         this.endDate = endDate;
         this.title = title;
@@ -55,9 +53,8 @@ public class DateItem {
 
     @Override
     public String toString() {
-        return "DateItem{" +
-                "homepage=" + homepage +
-                ", startDate=" + startDate +
+        return "Period{" +
+                "startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
@@ -68,11 +65,11 @@ public class DateItem {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DateItem dateItem = (DateItem) o;
-        return startDate.equals(dateItem.startDate) &&
-                endDate.equals(dateItem.endDate) &&
-                title.equals(dateItem.title) &&
-                description.equals(dateItem.description);
+        Period period = (Period) o;
+        return startDate.equals(period.startDate) &&
+                endDate.equals(period.endDate) &&
+                title.equals(period.title) &&
+                Objects.equals(description, period.description);
     }
 
     @Override
