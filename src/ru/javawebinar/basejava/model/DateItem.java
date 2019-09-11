@@ -4,36 +4,37 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class DateItem {
-    private LocalDate startTime;
-    private LocalDate endTime;
+    private Link homepage;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String title;
     private String description;
 
-    public DateItem(LocalDate startTime, LocalDate endTime, String title, String description) {
-        Objects.requireNonNull(startTime, "start time must not be null");
-        Objects.requireNonNull(endTime, "end time must not be null");
+    public DateItem(String name, String url, LocalDate startDate, LocalDate endDate, String title, String description) {
+        Objects.requireNonNull(startDate, "start time must not be null");
+        Objects.requireNonNull(endDate, "end time must not be null");
         Objects.requireNonNull(title, "title must not be null");
-        Objects.requireNonNull(description, "description must not be null");
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.homepage = new Link(name, url);
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.title = title;
         this.description = description;
     }
 
-    public LocalDate getStartTime() {
-        return startTime;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setStartTime(LocalDate startTime) {
-        this.startTime = startTime;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDate getEndTime() {
-        return endTime;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setEndTime(LocalDate endTime) {
-        this.endTime = endTime;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public String getTitle() {
@@ -54,7 +55,13 @@ public class DateItem {
 
     @Override
     public String toString() {
-        return startTime + " - " + endTime + "   " + title + "/n  " + description;
+        return "DateItem{" +
+                "homepage=" + homepage +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 
     @Override
@@ -62,14 +69,14 @@ public class DateItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DateItem dateItem = (DateItem) o;
-        return startTime.equals(dateItem.startTime) &&
-                endTime.equals(dateItem.endTime) &&
+        return startDate.equals(dateItem.startDate) &&
+                endDate.equals(dateItem.endDate) &&
                 title.equals(dateItem.title) &&
                 description.equals(dateItem.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(startTime, endTime, title, description);
+        return Objects.hash(startDate, endDate, title, description);
     }
 }

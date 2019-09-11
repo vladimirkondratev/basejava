@@ -23,7 +23,9 @@ public class DateSection extends AbstractSection {
 
     @Override
     public String toString() {
-        return title + "\n" + items;
+        return "DateSection{" +
+                "title=" + title
+                + items + '}';
     }
 
     @Override

@@ -11,7 +11,7 @@ public class ResumeTestData {
         Resume resume = new Resume("Name Surname");
 
         resume.putContact(ContactType.PHONE, "+7(900) 111-1111");
-        resume.putContact(ContactType.EMAIL, "account@yandex.ru");
+        resume.putContact(ContactType.MAIL, "account@yandex.ru");
         resume.putContact(ContactType.SKYPE, "skype.skype");
 
         resume.putSection(SectionType.OBJECTIVE, new TextSection("Позиция", "Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям."));
@@ -36,16 +36,14 @@ public class ResumeTestData {
                 "Selenium (htmlelements).");
         resume.putSection(SectionType.QUALIFICATIONS, new ListSection("Квалификация", qualificationList));
 
-        DateItem experience1 = new DateItem(LocalDate.of(2013, 10, 1),
-                LocalDate.now(), "Java Online Projects", "Автор проекта.\n" +
-                "   Создание, организация и проведение Java онлайн проектов и стажировок.");
-        DateItem experience2 = new DateItem(LocalDate.of(2014, 10, 1),
-                LocalDate.of(2016, 1, 1), "Wrike", "Старший разработчик (backend)\n" +
-                "   Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis,\n" +
+        DateItem experience1 = new DateItem("Java Online Projects", "http://javaops.ru/", LocalDate.of(2013, 10, 1),
+                LocalDate.now(), "Автор проекта.", "   Создание, организация и проведение Java онлайн проектов и стажировок.");
+        DateItem experience2 = new DateItem("Wrike", "https://www.wrike.com/", LocalDate.of(2014, 10, 1),
+                LocalDate.of(2016, 1, 1), "Старший разработчик (backend)", "   Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis,\n" +
                 "   Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
-        DateItem experience3 = new DateItem(LocalDate.of(2012, 4, 1),
-                LocalDate.of(2016, 1, 1), "RIT Center",
-                "Java архитектор\n" +
+        DateItem experience3 = new DateItem("RIT Center", "RIT Center", LocalDate.of(2012, 4, 1),
+                LocalDate.of(2016, 1, 1), "Java архитектор",
+                "\n" +
                         "   Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование,\n" +
                         "   ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx),\n" +
                         "   AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS,\n" +
@@ -60,12 +58,12 @@ public class ResumeTestData {
         experienceList.add(experience3);
         resume.putSection(SectionType.EXPERIENCE, new DateSection("Опыт работы", experienceList));
 
-        DateItem education1 = new DateItem(LocalDate.of(2013, 3, 1),
-                LocalDate.of(2013, 5, 1), "Coursera", "Functional Programming Principles in Scala\" by Martin Odersky");
-        DateItem education2 = new DateItem(LocalDate.of(2011, 3, 1),
-                LocalDate.of(2014, 4, 1), "Luxoft", "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.");
-        DateItem education3 = new DateItem(LocalDate.of(2005, 1, 1),
-                LocalDate.of(2005, 4, 1), "Siemens AG", "3 месяца обучения мобильным IN сетям (Берлин)");
+        DateItem education1 = new DateItem("Coursera", "https://www.coursera.org/course/progfun", LocalDate.of(2013, 3, 1),
+                LocalDate.of(2013, 5, 1), "Functional Programming Principles in Scala\" by Martin Odersky", null);
+        DateItem education2 = new DateItem("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366", LocalDate.of(2011, 3, 1),
+                LocalDate.of(2014, 4, 1), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.", null);
+        DateItem education3 = new DateItem("Siemens AG", "http://www.siemens.ru/", LocalDate.of(2005, 1, 1),
+                LocalDate.of(2005, 4, 1), "3 месяца обучения мобильным IN сетям (Берлин)", null);
         List<DateItem> educationList = new ArrayList<>();
         educationList.add(education1);
         educationList.add(education2);
