@@ -1,10 +1,15 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class OrganizationSection extends AbstractSection {
     private List<Organization> items;
+
+    public OrganizationSection(String title, Organization... organizations) {
+        this(title, Arrays.asList(organizations));
+    }
 
     public OrganizationSection(String title, List<Organization> items) {
         Objects.requireNonNull(title, "title must not be null");

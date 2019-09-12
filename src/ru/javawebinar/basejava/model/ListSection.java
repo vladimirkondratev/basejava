@@ -1,10 +1,16 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class ListSection extends AbstractSection {
-    private List<String> items;
+    private List<String> items = new ArrayList<>();
+
+    public ListSection(String title, String... items) {
+        this(title, Arrays.asList(items));
+    }
 
     public ListSection(String title, List<String> items) {
         Objects.requireNonNull(title, "title must not be null");
