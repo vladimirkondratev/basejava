@@ -32,15 +32,18 @@ public class MainFile {
 
 
         System.out.println("--------------------------------------");
-        printFileNameRecursion(new File("D:\\java_workspace\\basejava\\"));
+        printFileNameRecursion(new File("./src/ru/javawebinar/basejava"));
     }
 
     private static void printFileNameRecursion(File directory) {
-        for (File file : directory.listFiles()) {
-            if (file.isFile()) {
-                System.out.println(file.getName());
-            } else {
-                printFileNameRecursion(file);
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    System.out.println(file.getName());
+                } else {
+                    printFileNameRecursion(file);
+                }
             }
         }
     }
