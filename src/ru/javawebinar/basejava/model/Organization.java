@@ -1,36 +1,39 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Organization {
+public class Organization implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Link homepage;
-    private List<Period> periods;
+    private List<Position> positions;
 
-    public Organization(String name, String url, Period... periods) {
-        this(new Link(name, url), Arrays.asList(periods));
+    public Organization(String name, String url, Position... positions) {
+        this(new Link(name, url), Arrays.asList(positions));
     }
 
-    public Organization(Link homepage, List<Period> periods) {
+    public Organization(Link homepage, List<Position> positions) {
         this.homepage = homepage;
-        this.periods = periods;
+        this.positions = positions;
     }
 
-    public List<Period> getPeriods() {
-        return periods;
+    public List<Position> getPositions() {
+        return positions;
     }
 
-    public void setPeriods(List<Period> periods) {
-        this.periods = periods;
+    public void setPositions(List<Position> positions) {
+        this.positions = positions;
     }
 
     @Override
     public String toString() {
         return "DateItem{" +
                 "homepage=" + homepage +
-                ", periods=" + periods +
+                ", periods=" + positions +
                 '}';
     }
 
@@ -40,21 +43,21 @@ public class Organization {
         if (o == null || getClass() != o.getClass()) return false;
         Organization organization = (Organization) o;
         return Objects.equals(homepage, organization.homepage) &&
-                Objects.equals(periods, organization.periods);
+                Objects.equals(positions, organization.positions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(homepage, periods);
+        return Objects.hash(homepage, positions);
     }
 
-    public static class Period {
+    public static class Position implements Serializable{
         private LocalDate startDate;
         private LocalDate endDate;
         private String title;
         private String description;
 
-        public Period(LocalDate startDate, LocalDate endDate, String title, String description) {
+        public Position(LocalDate startDate, LocalDate endDate, String title, String description) {
             Objects.requireNonNull(startDate, "start time must not be null");
             Objects.requireNonNull(endDate, "end time must not be null");
             Objects.requireNonNull(title, "title must not be null");
@@ -110,11 +113,11 @@ public class Organization {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            Period period = (Period) o;
-            return startDate.equals(period.startDate) &&
-                    endDate.equals(period.endDate) &&
-                    title.equals(period.title) &&
-                    Objects.equals(description, period.description);
+            Position position = (Position) o;
+            return startDate.equals(position.startDate) &&
+                    endDate.equals(position.endDate) &&
+                    title.equals(position.title) &&
+                    Objects.equals(description, position.description);
         }
 
         @Override

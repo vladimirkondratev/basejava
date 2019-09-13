@@ -40,8 +40,8 @@ public class ResumeTestData {
                         "Selenium (htmlelements).");
                 resume.addSection(SectionType.QUALIFICATIONS, new ListSection("Квалификация", qualificationList));
 
-                List<Organization.Period> periods1 = new ArrayList<>();
-                periods1.add(new Organization.Period(DateUtil.of(2013, Month.OCTOBER),
+                List<Organization.Position> periods1 = new ArrayList<>();
+                periods1.add(new Organization.Position(DateUtil.of(2013, Month.OCTOBER),
                         DateUtil.NOW,
                         "Автор проекта.",
                         "Создание, организация и проведение Java онлайн проектов и стажировок."));
@@ -49,8 +49,8 @@ public class ResumeTestData {
                         new Link("Java Online Projects","http://javaops.ru/"),
                         periods1);
 
-                List<Organization.Period> periods2 = new ArrayList<>();
-                periods1.add(new Organization.Period(DateUtil.of(2014, Month.OCTOBER),
+                List<Organization.Position> periods2 = new ArrayList<>();
+                periods1.add(new Organization.Position(DateUtil.of(2014, Month.OCTOBER),
                         DateUtil.of(2016, Month.JANUARY),
                         "Старший разработчик (backend)",
                         "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis,\n" +
@@ -64,8 +64,8 @@ public class ResumeTestData {
                 experienceList.add(experience2);
                 resume.addSection(SectionType.EXPERIENCE, new OrganizationSection("Опыт работы", experienceList));
 
-                List<Organization.Period> periods3 = new ArrayList<>();
-                periods3.add(new Organization.Period(DateUtil.of(2013, Month.MARCH),
+                List<Organization.Position> periods3 = new ArrayList<>();
+                periods3.add(new Organization.Position(DateUtil.of(2013, Month.MARCH),
                         DateUtil.of(2013, Month.MAY),
                         "Functional Programming Principles in Scala\" by Martin Odersky",
                         null));
@@ -73,12 +73,12 @@ public class ResumeTestData {
                         new Link("Coursera", "https://www.coursera.org/course/progfun"),
                         periods3);
 
-                List<Organization.Period> periods4 = new ArrayList<>();
-                periods4.add(new Organization.Period(DateUtil.of(1993, Month.SEPTEMBER),
+                List<Organization.Position> periods4 = new ArrayList<>();
+                periods4.add(new Organization.Position(DateUtil.of(1993, Month.SEPTEMBER),
                         DateUtil.of(1996, Month.JULY),
                         "Аспирантура (программист С, С++)",
                         null));
-                periods4.add(new Organization.Period(DateUtil.of(1987, Month.SEPTEMBER),
+                periods4.add(new Organization.Position(DateUtil.of(1987, Month.SEPTEMBER),
                         DateUtil.of(1993, Month.JULY),
                         "Инженер (программист Fortran, C)",
                         null));

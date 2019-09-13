@@ -1,12 +1,13 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * ru.javawebinar.basejava.model.Resume class
  */
-public class Resume implements Comparable {
-
+public class Resume implements Comparable<Resume>, Serializable {
+    private static final long serialVersionUID = 1L;
     // Unique identifier
     private final String uuid;
 
@@ -73,7 +74,7 @@ public class Resume implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(Resume o) {
         return Comparator.comparing(Resume::getFullName)
                 .thenComparing(Resume::getUuid)
                 .compare(this, (Resume) o);
