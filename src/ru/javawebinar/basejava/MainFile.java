@@ -1,6 +1,7 @@
 package ru.javawebinar.basejava;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,40 +9,37 @@ import java.nio.file.Paths;
 
 public class MainFile {
     public static void main(String[] args) {
-//        String filePath = ".\\.gitignore";
-//
-//        File file = new File(filePath);
-//        try {
-//            System.out.println(file.getCanonicalPath());
-//        } catch (IOException e) {
-//            throw new RuntimeException("Error", e);
-//        }
-//
-//        File dir = new File("./src/ru/javawebinar/basejava");
-//        System.out.println(dir.isDirectory());
-//        String[] list = dir.list();
-//        if (list != null) {
-//            for (String name : list) {
-//                System.out.println(name);
-//            }
-//        }
-//
-//        try (FileInputStream fis = new FileInputStream(filePath)) {
-//            System.out.println(fis.read());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        String filePath = ".\\.gitignore";
 
+        File file = new File(filePath);
+        try {
+            System.out.println(file.getCanonicalPath());
+        } catch (IOException e) {
+            throw new RuntimeException("Error", e);
+        }
+
+        File dir = new File("./src/ru/javawebinar/basejava");
+        System.out.println(dir.isDirectory());
+        String[] list = dir.list();
+        if (list != null) {
+            for (String name : list) {
+                System.out.println(name);
+            }
+        }
+
+        try (FileInputStream fis = new FileInputStream(filePath)) {
+            System.out.println(fis.read());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println("--------------------------------------");
-        printFileNameRecursion(new File("./src/ru/javawebinar/basejava"));
+        printFileNameRecursionWithParagraphs(new File("./src/ru/javawebinar/basejava"), 0);
     }
 
-    private static int paragraphSize = 0;
-
-    private static String calcParagraph() {
+    private static String calcParagraph(int count) {
         StringBuilder paragraph = new StringBuilder();
-        for (int i = 0; i < paragraphSize; i++) {
+        for (int i = 0; i < count; i++) {
             paragraph.append("|  ");
         }
         return paragraph.toString();
@@ -79,31 +77,31 @@ public class MainFile {
     }
 
     private static void printFileNameRecursion(File directory) {
-        File[] files = getSortedFilesAndFolders(directory);
+        File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (file.isFile()) {
-                    System.out.println(calcParagraph() + file.getName());
+                    System.out.println("File: " + file.getName());
                 } else if (file.isDirectory()) {
-                    System.out.println(calcParagraph() + file.getName());
-                    paragraphSize++;
+                    System.out.println("Directory: " + file.getName());
                     printFileNameRecursion(file);
                 }
             }
-            paragraphSize--;
         }
+    }
 
-//        File[] files = directory.listFiles();
-//        if (files != null) {
-//            for (File file : files) {
-//                if (file.isFile()) {
-//                    System.out.println(calcParagraph() + file.getName());
-//                } else if (file.isDirectory()) {
-//                    System.out.println(calcParagraph() + file.getName());
-//                    paragraphSize++;
-//                    printFileNameRecursion(file);
-//                }
-//            }
-//        }
+    private static void printFileNameRecursionWithParagraphs(File directory, int paragraphSize) {
+        File[] files = getSortedFilesAndFolders(directory);
+        if (files != null) {
+            String paragraph = calcParagraph(paragraphSize);
+            for (File file : files) {
+                if (file.isFile()) {
+                    System.out.println(paragraph + file.getName());
+                } else if (file.isDirectory()) {
+                    System.out.println(paragraph + file.getName());
+                    printFileNameRecursionWithParagraphs(file, paragraphSize + 1);
+                }
+            }
+        }
     }
 }
