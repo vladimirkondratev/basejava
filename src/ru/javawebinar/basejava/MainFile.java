@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 
 public class MainFile {
     public static void main(String[] args) {
@@ -45,26 +46,26 @@ public class MainFile {
         return paragraph.toString();
     }
 
+    private static Comparator<Path> pathComparator = (o1, o2) -> {
+        if (o1.toFile().isDirectory() && o2.toFile().isDirectory()) {
+            return o1.getFileName().compareTo(o2.getFileName());
+        }
+        if (o1.toFile().isFile() && o2.toFile().isFile()) {
+            return o1.getFileName().compareTo(o2.getFileName());
+        }
+        if (o1.toFile().isDirectory() && o2.toFile().isFile()) {
+            return -1;
+        }
+        if (o1.toFile().isFile() && o2.toFile().isDirectory()) {
+            return 1;
+        }
+        return 0;
+    };
+
     private static File[] getSortedFilesAndFolders(File directory) {
         try {
-            Path[] paths =
-                    Files.list(Paths.get(directory.getAbsolutePath()))
-                            .sorted((o1, o2) -> {
-                                if (o1.toFile().isDirectory() && o2.toFile().isDirectory()) {
-                                    return o1.getFileName().compareTo(o2.getFileName());
-                                }
-                                if (o1.toFile().isFile() && o2.toFile().isFile()) {
-                                    return o1.getFileName().compareTo(o2.getFileName());
-                                }
-                                if (o1.toFile().isDirectory() && o2.toFile().isFile()) {
-                                    return -1;
-                                }
-                                if (o1.toFile().isFile() && o2.toFile().isDirectory()) {
-                                    return 1;
-                                }
-                                return 0;
-                            }).toArray(Path[]::new);
-
+            Path[] paths = Files.list(Paths.get(directory.getAbsolutePath()))
+                    .sorted(pathComparator).toArray(Path[]::new);
             File[] files = new File[paths.length];
             for (int i = 0; i < paths.length; i++) {
                 files[i] = paths[i].toFile();
@@ -74,20 +75,6 @@ public class MainFile {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private static void printFileNameRecursion(File directory) {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isFile()) {
-                    System.out.println("File: " + file.getName());
-                } else if (file.isDirectory()) {
-                    System.out.println("Directory: " + file.getName());
-                    printFileNameRecursion(file);
-                }
-            }
-        }
     }
 
     private static void printFileNameRecursionWithParagraphs(File directory, int paragraphSize) {
@@ -100,6 +87,20 @@ public class MainFile {
                 } else if (file.isDirectory()) {
                     System.out.println(paragraph + file.getName());
                     printFileNameRecursionWithParagraphs(file, paragraphSize + 1);
+                }
+            }
+        }
+    }
+
+    private static void printFileNameRecursion(File directory) {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    System.out.println("File: " + file.getName());
+                } else if (file.isDirectory()) {
+                    System.out.println("Directory: " + file.getName());
+                    printFileNameRecursion(file);
                 }
             }
         }
