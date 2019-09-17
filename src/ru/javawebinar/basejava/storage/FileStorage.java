@@ -37,9 +37,9 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        String[] filenameList = directory.list();
-        if (filenameList != null) {
-            return filenameList.length;
+        String[] fileNameList = directory.list();
+        if (fileNameList != null) {
+            return fileNameList.length;
         } else {
             throw new StorageException("Directory read error", null);
         }
