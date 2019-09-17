@@ -35,15 +35,7 @@ public class MainFile {
         }
 
         System.out.println("--------------------------------------");
-        printFileNameRecursionWithParagraphs(new File("./src/ru/javawebinar/basejava"), 0);
-    }
-
-    private static String calcParagraph(int count) {
-        StringBuilder paragraph = new StringBuilder();
-        for (int i = 0; i < count; i++) {
-            paragraph.append("|  ");
-        }
-        return paragraph.toString();
+        printFileNameRecursionWithParagraphs(new File("./src/ru/javawebinar/basejava"), "");
     }
 
     private static Comparator<Path> pathComparator = (o1, o2) -> {
@@ -77,16 +69,15 @@ public class MainFile {
         return null;
     }
 
-    private static void printFileNameRecursionWithParagraphs(File directory, int paragraphSize) {
+    private static void printFileNameRecursionWithParagraphs(File directory, String paragraph) {
         File[] files = getSortedFilesAndFolders(directory);
         if (files != null) {
-            String paragraph = calcParagraph(paragraphSize);
             for (File file : files) {
                 if (file.isFile()) {
                     System.out.println(paragraph + file.getName());
                 } else if (file.isDirectory()) {
                     System.out.println(paragraph + file.getName());
-                    printFileNameRecursionWithParagraphs(file, paragraphSize + 1);
+                    printFileNameRecursionWithParagraphs(file, paragraph.concat("|  "));
                 }
             }
         }
