@@ -2,6 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.serializer.IOStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
     private File directory;
-    private IOStrategy IOStrategy;
+    private ru.javawebinar.basejava.storage.serializer.IOStrategy IOStrategy;
 
     protected FileStorage(File directory, IOStrategy IOStrategy) {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -41,7 +42,7 @@ public class FileStorage extends AbstractStorage<File> {
         if (fileNameList != null) {
             return fileNameList.length;
         } else {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read error");
         }
     }
 
@@ -100,7 +101,7 @@ public class FileStorage extends AbstractStorage<File> {
             }
             return resumes;
         } else {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read error");
         }
     }
 }
