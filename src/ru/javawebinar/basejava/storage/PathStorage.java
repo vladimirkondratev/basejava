@@ -13,13 +13,13 @@ import java.util.Objects;
 
 public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
-    private ResumeSerialization resumeSerialization;
+    private IOStrategy IOStrategy;
 
-    protected PathStorage(String dir, ResumeSerialization resumeSerialization) {
+    protected PathStorage(String dir, IOStrategy IOStrategy) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
-        Objects.requireNonNull(resumeSerialization, "type of serialization must not be null");
-        this.resumeSerialization = resumeSerialization;
+        Objects.requireNonNull(IOStrategy, "type of serialization must not be null");
+        this.IOStrategy = IOStrategy;
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
@@ -51,7 +51,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected void doUpdate(Resume resume, Path path) {
         try {
-            resumeSerialization.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
+            IOStrategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("File write error", path.getFileName().toString(), e);
         }
@@ -75,7 +75,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return resumeSerialization.doRead(new BufferedInputStream(Files.newInputStream(path)));
+            return IOStrategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("File read error", path.getFileName().toString(), e);
         }

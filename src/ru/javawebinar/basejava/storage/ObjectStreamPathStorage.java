@@ -5,7 +5,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamPathStorage implements ResumeSerialization {
+public class ObjectStreamPathStorage implements IOStrategy {
 
     @Override
     public void doWrite(Resume resume, OutputStream os) throws IOException {
