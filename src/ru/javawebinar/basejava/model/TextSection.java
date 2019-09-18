@@ -10,10 +10,8 @@ public class TextSection extends AbstractSection {
     public TextSection() {
     }
 
-    public TextSection(String title, String text) {
-        Objects.requireNonNull(title, "title must not be null");
+    public TextSection(String text) {
         Objects.requireNonNull(text, "text must not be null");
-        this.title = title;
         this.text = text;
     }
 
@@ -27,7 +25,9 @@ public class TextSection extends AbstractSection {
 
     @Override
     public String toString() {
-        return title + "\n  " + text;
+        return "TextSection{" +
+                "text='" + text + '\'' +
+                '}';
     }
 
     @Override

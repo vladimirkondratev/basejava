@@ -18,8 +18,8 @@ public class ResumeTestData {
                 resume.addContact(ContactType.MAIL, "account@yandex.ru");
                 resume.addContact(ContactType.SKYPE, "skype.skype");
 
-                resume.addSection(SectionType.OBJECTIVE, new TextSection("Позиция", "Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям."));
-                resume.addSection(SectionType.PERSONAL, new TextSection("Личные качества", "Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
+                resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям."));
+                resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
 
                 List<String> achievementList = new ArrayList<>();
                 achievementList.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven.\n" +
@@ -30,7 +30,7 @@ public class ResumeTestData {
                 achievementList.add("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, Bonita BPM,\n" +
                         "CMIS, LDAP. Разработка приложения управления окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO\n" +
                         "аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
-                resume.addSection(SectionType.ACHIEVEMENT, new ListSection("Достижения", achievementList));
+                resume.addSection(SectionType.ACHIEVEMENT, new ListSection(achievementList));
 
                 List<String> qualificationList = new ArrayList<>();
                 qualificationList.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
@@ -38,7 +38,7 @@ public class ResumeTestData {
                 qualificationList.add("Java Frameworks: Java 8 (Time API, Streams), Guava, Java Executor, MyBatis, Spring (MVC, Security, Data, Clouds, Boot), JPA\n" +
                         "(Hibernate, EclipseLink), Guice, GWT(SmartGWT, ExtGWT/GXT), Vaadin, Jasperreports, Apache Commons, Eclipse SWT, JUnit,\n" +
                         "Selenium (htmlelements).");
-                resume.addSection(SectionType.QUALIFICATIONS, new ListSection("Квалификация", qualificationList));
+                resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualificationList));
 
                 List<Organization.Position> periods1 = new ArrayList<>();
                 periods1.add(new Organization.Position(DateUtil.of(2013, Month.OCTOBER),
@@ -62,7 +62,7 @@ public class ResumeTestData {
                 List<Organization> experienceList = new ArrayList<>();
                 experienceList.add(experience1);
                 experienceList.add(experience2);
-                resume.addSection(SectionType.EXPERIENCE, new OrganizationSection("Опыт работы", experienceList));
+                resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(experienceList));
 
                 List<Organization.Position> periods3 = new ArrayList<>();
                 periods3.add(new Organization.Position(DateUtil.of(2013, Month.MARCH),
@@ -89,7 +89,7 @@ public class ResumeTestData {
                 List<Organization> educationList = new ArrayList<>();
                 educationList.add(education1);
                 educationList.add(education2);
-                resume.addSection(SectionType.EDUCATION, new OrganizationSection("Образование", educationList));
+                resume.addSection(SectionType.EDUCATION, new OrganizationSection(educationList));
                 break;
             }
             case "uuid2":

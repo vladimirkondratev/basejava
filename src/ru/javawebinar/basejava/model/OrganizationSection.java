@@ -12,14 +12,12 @@ public class OrganizationSection extends AbstractSection {
     public OrganizationSection() {
     }
 
-    public OrganizationSection(String title, Organization... organizations) {
-        this(title, Arrays.asList(organizations));
+    public OrganizationSection(Organization... organizations) {
+        this(Arrays.asList(organizations));
     }
 
-    public OrganizationSection(String title, List<Organization> items) {
-        Objects.requireNonNull(title, "title must not be null");
+    public OrganizationSection(List<Organization> items) {
         Objects.requireNonNull(items, "list must not be null");
-        this.title = title;
         this.items = items;
     }
 
@@ -33,9 +31,9 @@ public class OrganizationSection extends AbstractSection {
 
     @Override
     public String toString() {
-        return "DateSection{" +
-                "title=" + title
-                + items + '}';
+        return "OrganizationSection{" +
+                "items=" + items +
+                '}';
     }
 
     @Override
