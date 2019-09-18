@@ -8,6 +8,9 @@ public class Contact implements Serializable {
 
     private String value;
 
+    public Contact() {
+    }
+
     public Contact(String value) {
         Objects.requireNonNull(value, "value must not be null");
         this.value = value;

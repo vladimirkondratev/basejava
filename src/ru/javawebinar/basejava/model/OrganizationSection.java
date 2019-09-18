@@ -9,6 +9,9 @@ public class OrganizationSection extends AbstractSection {
 
     private List<Organization> items;
 
+    public OrganizationSection() {
+    }
+
     public OrganizationSection(String title, Organization... organizations) {
         this(title, Arrays.asList(organizations));
     }

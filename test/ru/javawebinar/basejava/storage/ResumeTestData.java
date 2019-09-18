@@ -46,11 +46,11 @@ public class ResumeTestData {
                         "Автор проекта.",
                         "Создание, организация и проведение Java онлайн проектов и стажировок."));
                 Organization experience1 = new Organization(
-                        new Link("Java Online Projects","http://javaops.ru/"),
+                        new Link("Java Online Projects", "http://javaops.ru/"),
                         periods1);
 
                 List<Organization.Position> periods2 = new ArrayList<>();
-                periods1.add(new Organization.Position(DateUtil.of(2014, Month.OCTOBER),
+                periods2.add(new Organization.Position(DateUtil.of(2014, Month.OCTOBER),
                         DateUtil.of(2016, Month.JANUARY),
                         "Старший разработчик (backend)",
                         "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis,\n" +
@@ -84,7 +84,7 @@ public class ResumeTestData {
                         null));
                 Organization education2 = new Organization(
                         new Link("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
-                        "http://www.ifmo.ru/"),
+                                "http://www.ifmo.ru/"),
                         periods4);
                 List<Organization> educationList = new ArrayList<>();
                 educationList.add(education1);

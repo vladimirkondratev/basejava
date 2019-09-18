@@ -1,5 +1,8 @@
 package ru.javawebinar.basejava.model;
 
+import ru.javawebinar.basejava.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -11,6 +14,9 @@ public class Organization implements Serializable {
 
     private Link homepage;
     private List<Position> positions;
+
+    public Organization() {
+    }
 
     public Organization(String name, String url, Position... positions) {
         this(new Link(name, url), Arrays.asList(positions));
@@ -27,6 +33,14 @@ public class Organization implements Serializable {
 
     public void setPositions(List<Position> positions) {
         this.positions = positions;
+    }
+
+    public Link getHomepage() {
+        return homepage;
+    }
+
+    public void setHomepage(Link homepage) {
+        this.homepage = homepage;
     }
 
     @Override
@@ -51,11 +65,14 @@ public class Organization implements Serializable {
         return Objects.hash(homepage, positions);
     }
 
-    public static class Position implements Serializable{
+    public static class Position implements Serializable {
         private LocalDate startDate;
         private LocalDate endDate;
         private String title;
         private String description;
+
+        public Position() {
+        }
 
         public Position(LocalDate startDate, LocalDate endDate, String title, String description) {
             Objects.requireNonNull(startDate, "start time must not be null");
@@ -67,6 +84,7 @@ public class Organization implements Serializable {
             this.description = description;
         }
 
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         public LocalDate getStartDate() {
             return startDate;
         }
@@ -75,6 +93,7 @@ public class Organization implements Serializable {
             this.startDate = startDate;
         }
 
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         public LocalDate getEndDate() {
             return endDate;
         }
