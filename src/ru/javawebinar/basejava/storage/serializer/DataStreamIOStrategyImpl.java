@@ -17,14 +17,12 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
             Map<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            writeCollection(contacts.entrySet(), dos, (Writer<Map.Entry<ContactType, String>>) entry -> {
+            writeCollection(contacts.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             });
             Map<SectionType, AbstractSection> sections = resume.getSections();
-            dos.writeInt(sections.size());
-            writeCollection(sections.entrySet(), dos, (Writer<Map.Entry<SectionType, AbstractSection>>) entry -> {
+            writeCollection(sections.entrySet(), dos, entry -> {
                 SectionType key = entry.getKey();
                 AbstractSection section = entry.getValue();
                 dos.writeUTF(key.name());
@@ -37,20 +35,17 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS: {
                         List<String> list = ((ListSection) section).getItems();
-                        dos.writeInt(list.size());
                         writeCollection(list, dos, dos::writeUTF);
                         break;
                     }
                     case EXPERIENCE:
                     case EDUCATION: {
                         List<Organization> organizationList = ((OrganizationSection) section).getItems();
-                        dos.writeInt(organizationList.size());
-                        writeCollection(organizationList, dos, (Writer<Organization>) organization -> {
+                        writeCollection(organizationList, dos, organization -> {
                             dos.writeUTF(organization.getHomepage().getName());
                             writeStringNullable(dos, organization.getHomepage().getUrl());
                             List<Organization.Position> positionList = organization.getPositions();
-                            dos.writeInt(positionList.size());
-                            writeCollection(positionList, dos, (Writer<Organization.Position>) position -> {
+                            writeCollection(positionList, dos, position -> {
                                 dos.writeUTF(position.getStartDate().toString());
                                 dos.writeUTF(position.getEndDate().toString());
                                 dos.writeUTF(position.getTitle());
@@ -72,15 +67,16 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
         }
     }
 
-    private <T> void writeCollection(Collection list, DataOutputStream dos, Writer<T> action) throws IOException {
-        for (Object t : list) {
-            action.accept((T) t);
+    private <T> void writeCollection(Collection<T> collection, DataOutputStream dos, Writer<T> action) throws IOException {
+        dos.writeInt(collection.size());
+        for (T t : collection) {
+            action.write((T) t);
         }
     }
 
     @FunctionalInterface
     interface Writer<T> {
-        void accept(T t) throws IOException;
+        void write(T t) throws IOException;
     }
 
     @Override
