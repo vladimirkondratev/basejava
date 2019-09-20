@@ -84,7 +84,7 @@ public class ResumeTestData {
                         null));
                 Organization education2 = new Organization(
                         new Link("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
-                                "http://www.ifmo.ru/"),
+                                null),
                         periods4);
                 List<Organization> educationList = new ArrayList<>();
                 educationList.add(education1);

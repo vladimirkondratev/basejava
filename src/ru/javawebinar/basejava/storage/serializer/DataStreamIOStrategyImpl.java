@@ -5,6 +5,7 @@ import ru.javawebinar.basejava.model.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -17,14 +18,13 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
             dos.writeUTF(resume.getFullName());
             Map<ContactType, String> contacts = resume.getContacts();
             dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            writeCollection(contacts.entrySet(), dos, (Writer<Map.Entry<ContactType, String>>) entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
-
+            });
             Map<SectionType, AbstractSection> sections = resume.getSections();
             dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+            writeCollection(sections.entrySet(), dos, (Writer<Map.Entry<SectionType, AbstractSection>>) entry -> {
                 SectionType key = entry.getKey();
                 AbstractSection section = entry.getValue();
                 dos.writeUTF(key.name());
@@ -37,44 +37,50 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS: {
                         List<String> list = ((ListSection) section).getItems();
-                        int size = list.size();
-                        dos.writeInt(size);
-                        for (int i = 0; i < size; i++) {
-                            dos.writeUTF(list.get(i));
-                        }
+                        dos.writeInt(list.size());
+                        writeCollection(list, dos, dos::writeUTF);
                         break;
                     }
                     case EXPERIENCE:
                     case EDUCATION: {
                         List<Organization> organizationList = ((OrganizationSection) section).getItems();
-                        int organizationListSize = organizationList.size();
-                        dos.writeInt(organizationListSize);
-                        for (int i = 0; i < organizationListSize; i++) {
-                            Organization organization = organizationList.get(i);
+                        dos.writeInt(organizationList.size());
+                        writeCollection(organizationList, dos, (Writer<Organization>) organization -> {
                             dos.writeUTF(organization.getHomepage().getName());
-                            dos.writeUTF(organization.getHomepage().getUrl());
+                            writeStringNullable(dos, organization.getHomepage().getUrl());
                             List<Organization.Position> positionList = organization.getPositions();
-                            int positionListSize = positionList.size();
-                            dos.writeInt(positionListSize);
-                            for (int j = 0; j < positionListSize; j++) {
-                                Organization.Position position = positionList.get(j);
+                            dos.writeInt(positionList.size());
+                            writeCollection(positionList, dos, (Writer<Organization.Position>) position -> {
                                 dos.writeUTF(position.getStartDate().toString());
                                 dos.writeUTF(position.getEndDate().toString());
                                 dos.writeUTF(position.getTitle());
-                                String description = position.getDescription();
-                                if (description != null) {
-                                    dos.writeBoolean(true);
-                                    dos.writeUTF(description);
-                                } else {
-                                    dos.writeBoolean(false);
-                                }
-                            }
-                        }
+                                writeStringNullable(dos, position.getDescription());
+                            });
+                        });
                         break;
                     }
                 }
-            }
+            });
         }
+    }
+
+    private void writeStringNullable(DataOutputStream dos, String data) throws IOException {
+        if (data != null) {
+            dos.writeUTF(data);
+        } else {
+            dos.writeUTF("");
+        }
+    }
+
+    private <T> void writeCollection(Collection list, DataOutputStream dos, Writer<T> action) throws IOException {
+        for (Object t : list) {
+            action.accept((T) t);
+        }
+    }
+
+    @FunctionalInterface
+    interface Writer<T> {
+        void accept(T t) throws IOException;
     }
 
     @Override
@@ -112,14 +118,18 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
                         int organizationListSize = dis.readInt();
                         List<Organization> organizationList = new ArrayList<>();
                         for (int j = 0; j < organizationListSize; j++) {
-                            Link homepage = new Link(dis.readUTF(), dis.readUTF());
+                            String organizationName = dis.readUTF();
+                            String urlTemp = dis.readUTF();
+                            String url = urlTemp.equals("") ? null : urlTemp;
+                            Link homepage = new Link(organizationName, url);
                             List<Organization.Position> positionList = new ArrayList<>();
                             int positionListSize = dis.readInt();
                             for (int k = 0; k < positionListSize; k++) {
                                 LocalDate startDay = LocalDate.parse(dis.readUTF());
                                 LocalDate endDay = LocalDate.parse(dis.readUTF());
                                 String title = dis.readUTF();
-                                String description = dis.readBoolean() ? dis.readUTF() : null;
+                                String descriptionTemp = dis.readUTF();
+                                String description = descriptionTemp.equals("") ? null : descriptionTemp;
                                 positionList.add(new Organization.Position(startDay, endDay, title, description));
                             }
                             organizationList.add(new Organization(homepage, positionList));
