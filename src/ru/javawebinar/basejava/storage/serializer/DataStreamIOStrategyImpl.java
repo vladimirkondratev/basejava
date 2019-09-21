@@ -83,33 +83,29 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
 
-            Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-            readMap(contacts, dis, () -> new EnumMap.SimpleEntry<>(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
-            resume.setContacts(contacts);
+            readItem(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
 
-            Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
-            readMap(sections, dis, () -> {
+            readItem(dis, () -> {
                 SectionType type = SectionType.valueOf(dis.readUTF());
                 switch (type) {
                     case OBJECTIVE:
                     case PERSONAL: {
-                        return new EnumMap.SimpleEntry<>(type, new TextSection(dis.readUTF()));
+                        resume.addSection(type, new TextSection(dis.readUTF()));
+                        break;
                     }
                     case ACHIEVEMENT:
                     case QUALIFICATIONS: {
-                        List<String> sectionList = new ArrayList<>();
-                        readCollection(sectionList, dis, dis::readUTF);
-                        return new EnumMap.SimpleEntry<>(type, new ListSection(sectionList));
+                        List<String> sectionList = readCollection(dis, dis::readUTF);
+                        resume.addSection(type, new ListSection(sectionList));
+                        break;
                     }
                     case EXPERIENCE:
                     case EDUCATION: {
-                        List<Organization> organizationList = new ArrayList<>();
-                        readCollection(organizationList, dis, () -> {
+                        List<Organization> organizationList = readCollection(dis, () -> {
                             String organizationName = dis.readUTF();
                             String url = readStringNullable(dis);
                             Link homepage = new Link(organizationName, url);
-                            List<Organization.Position> positionList = new ArrayList<>();
-                            readCollection(positionList, dis, () -> {
+                            List<Organization.Position> positionList = readCollection(dis, () -> {
                                 LocalDate startDay = LocalDate.parse(dis.readUTF());
                                 LocalDate endDay = LocalDate.parse(dis.readUTF());
                                 String title = dis.readUTF();
@@ -118,12 +114,11 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
                             });
                             return new Organization(homepage, positionList);
                         });
-                        return new EnumMap.SimpleEntry<>(type, new OrganizationSection(organizationList));
+                        resume.addSection(type, new OrganizationSection(organizationList));
+                        break;
                     }
                 }
-                return null;
             });
-            resume.setSections(sections);
             return resume;
         }
     }
@@ -139,22 +134,23 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
     }
 
     @FunctionalInterface
-    interface MapReader<K, V> {
-        Map.Entry<K, V> read() throws IOException;
+    interface ItemsReader {
+        void read() throws IOException;
     }
 
-    private <T> void readCollection(Collection<T> collection, DataInputStream dis, CollectionReader<T> action) throws IOException {
+    private void readItem(DataInputStream dis, ItemsReader action) throws IOException {
         int size = dis.readInt();
         for (int i = 0; i < size; i++) {
-            collection.add(action.read());
+            action.read();
         }
     }
 
-    private <K, V> void readMap(Map<K, V> map, DataInputStream dis, MapReader<K, V> action) throws IOException {
+    private <T> List<T> readCollection(DataInputStream dis, CollectionReader<T> action) throws IOException {
         int size = dis.readInt();
+        List<T> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            Map.Entry<K, V> mapEntry = action.read();
-            map.put(mapEntry.getKey(), mapEntry.getValue());
+            list.add(action.read());
         }
+        return list;
     }
 }
