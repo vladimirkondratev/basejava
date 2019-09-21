@@ -83,9 +83,9 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
 
-            readItem(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readItems(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
 
-            readItem(dis, () -> {
+            readItems(dis, () -> {
                 SectionType type = SectionType.valueOf(dis.readUTF());
                 switch (type) {
                     case OBJECTIVE:
@@ -134,11 +134,11 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
     }
 
     @FunctionalInterface
-    interface ItemsReader {
+    interface ItemReader {
         void read() throws IOException;
     }
 
-    private void readItem(DataInputStream dis, ItemsReader action) throws IOException {
+    private void readItems(DataInputStream dis, ItemReader action) throws IOException {
         int size = dis.readInt();
         for (int i = 0; i < size; i++) {
             action.read();
