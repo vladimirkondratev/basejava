@@ -4,10 +4,7 @@ import ru.javawebinar.basejava.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataStreamIOStrategyImpl implements IOStrategy {
 
@@ -70,7 +67,7 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
     private <T> void writeCollection(Collection<T> collection, DataOutputStream dos, Writer<T> action) throws IOException {
         dos.writeInt(collection.size());
         for (T t : collection) {
-            action.write((T) t);
+            action.write(t);
         }
     }
 
@@ -85,57 +82,79 @@ public class DataStreamIOStrategyImpl implements IOStrategy {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
-            int sectionsSize = dis.readInt();
-            for (int i = 0; i < sectionsSize; i++) {
+
+            Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+            readMap(contacts, dis, () -> new EnumMap.SimpleEntry<>(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            resume.setContacts(contacts);
+
+            Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+            readMap(sections, dis, () -> {
                 SectionType type = SectionType.valueOf(dis.readUTF());
                 switch (type) {
                     case OBJECTIVE:
                     case PERSONAL: {
-                        resume.addSection(type,
-                                new TextSection(dis.readUTF()));
-                        break;
+                        return new EnumMap.SimpleEntry<>(type, new TextSection(dis.readUTF()));
                     }
                     case ACHIEVEMENT:
                     case QUALIFICATIONS: {
-                        int sizeListSection = dis.readInt();
                         List<String> sectionList = new ArrayList<>();
-                        for (int j = 0; j < sizeListSection; j++) {
-                            sectionList.add(dis.readUTF());
-                        }
-                        resume.addSection(type, new ListSection(sectionList));
-                        break;
+                        readCollection(sectionList, dis, dis::readUTF);
+                        return new EnumMap.SimpleEntry<>(type, new ListSection(sectionList));
                     }
                     case EXPERIENCE:
                     case EDUCATION: {
-                        int organizationListSize = dis.readInt();
                         List<Organization> organizationList = new ArrayList<>();
-                        for (int j = 0; j < organizationListSize; j++) {
+                        readCollection(organizationList, dis, () -> {
                             String organizationName = dis.readUTF();
-                            String urlTemp = dis.readUTF();
-                            String url = urlTemp.equals("") ? null : urlTemp;
+                            String url = readStringNullable(dis);
                             Link homepage = new Link(organizationName, url);
                             List<Organization.Position> positionList = new ArrayList<>();
-                            int positionListSize = dis.readInt();
-                            for (int k = 0; k < positionListSize; k++) {
+                            readCollection(positionList, dis, () -> {
                                 LocalDate startDay = LocalDate.parse(dis.readUTF());
                                 LocalDate endDay = LocalDate.parse(dis.readUTF());
                                 String title = dis.readUTF();
-                                String descriptionTemp = dis.readUTF();
-                                String description = descriptionTemp.equals("") ? null : descriptionTemp;
-                                positionList.add(new Organization.Position(startDay, endDay, title, description));
-                            }
-                            organizationList.add(new Organization(homepage, positionList));
-                        }
-                        resume.addSection(type, new OrganizationSection(organizationList));
-                        break;
+                                String description = readStringNullable(dis);
+                                return new Organization.Position(startDay, endDay, title, description);
+                            });
+                            return new Organization(homepage, positionList);
+                        });
+                        return new EnumMap.SimpleEntry<>(type, new OrganizationSection(organizationList));
                     }
                 }
-            }
+                return null;
+            });
+            resume.setSections(sections);
             return resume;
+        }
+    }
+
+    private String readStringNullable(DataInputStream dis) throws IOException {
+        String string = dis.readUTF();
+        return string.equals("") ? null : string;
+    }
+
+    @FunctionalInterface
+    interface CollectionReader<T> {
+        T read() throws IOException;
+    }
+
+    @FunctionalInterface
+    interface MapReader<K, V> {
+        Map.Entry<K, V> read() throws IOException;
+    }
+
+    private <T> void readCollection(Collection<T> collection, DataInputStream dis, CollectionReader<T> action) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            collection.add(action.read());
+        }
+    }
+
+    private <K, V> void readMap(Map<K, V> map, DataInputStream dis, MapReader<K, V> action) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            Map.Entry<K, V> mapEntry = action.read();
+            map.put(mapEntry.getKey(), mapEntry.getValue());
         }
     }
 }
