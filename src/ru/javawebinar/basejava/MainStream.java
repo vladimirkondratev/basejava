@@ -2,6 +2,7 @@ package ru.javawebinar.basejava;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,9 +23,8 @@ public class MainStream {
                 .distinct()
                 .sorted()
                 .reduce((a, b) -> b = b + a * 10)
-                .getAsInt();
+                .orElse(-1);
     }
-
 
     public static List<Integer> oddOrEven(List<Integer> integers) {
         int sum = 0;
@@ -44,13 +44,12 @@ public class MainStream {
     }
 
     public static List<Integer> oddOrEvenStream(List<Integer> integers) {
-        int[] sum = {0};
-        return integers.stream()
-                .map(i -> {
-                    sum[0] = sum[0] + i;
-                    return i;
-                }).sorted()
-                .filter(i -> i % 2 == sum[0] % 2)
-                .collect(Collectors.toList());
+        List<Integer> sum = Collections.synchronizedList(new ArrayList<>());
+        sum.add(0);
+        return integers
+                .stream()
+                .peek(i -> sum.add(0, sum.get(0) + i))
+                .collect(Collectors.partitioningBy(i -> i % 2 == 0))
+                .get(sum.get(0) % 2 == 0);
     }
 }
