@@ -2,8 +2,8 @@ package ru.javawebinar.basejava;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class MainStream {
@@ -35,21 +35,21 @@ public class MainStream {
                 sum += i;
             }
         }
-        if (sum % 2 != 0) {
+        if (sum % 2 == 0) {
             return odds;
         } else {
-            integers.removeAll(odds);
-            return integers;
+            List<Integer> result = new ArrayList<>(integers);
+            result.removeAll(odds);
+            return result;
         }
     }
 
     public static List<Integer> oddOrEvenStream(List<Integer> integers) {
-        List<Integer> sum = Collections.synchronizedList(new ArrayList<>());
-        sum.add(0);
+        AtomicInteger sum = new AtomicInteger(0);
         return integers
                 .stream()
-                .peek(i -> sum.add(0, sum.get(0) + i))
+                .peek(i -> sum.accumulateAndGet(i, Integer::sum))
                 .collect(Collectors.partitioningBy(i -> i % 2 == 0))
-                .get(sum.get(0) % 2 == 0);
+                .get(sum.get() % 2 != 0);
     }
 }
