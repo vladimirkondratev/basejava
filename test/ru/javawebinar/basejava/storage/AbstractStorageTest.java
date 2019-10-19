@@ -3,6 +3,7 @@ package ru.javawebinar.basejava.storage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
@@ -12,8 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
+    protected static final File STORAGE_DIR = Config.get().getStorageDir();
+
     protected Storage storage;
-    protected static final File STORAGE_DIR = new File("D:\\java_workspace\\basejava\\storage");
+
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
@@ -96,6 +99,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getExist() throws Exception {
+        Assert.assertEquals(resume1, storage.get(UUID_1));
         Assert.assertEquals(resume1, storage.get(UUID_1));
     }
 
