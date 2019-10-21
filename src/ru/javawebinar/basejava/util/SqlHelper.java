@@ -20,11 +20,11 @@ public class SqlHelper {
         T execute(PreparedStatement ps) throws SQLException;
     }
 
-    public <T> T connectAndExecute(String statement, CodeToExecute code) {
+    public <T> T connectAndExecute(String statement, CodeToExecute<T> code) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(statement)) {
 
-            return (T) code.execute(ps);
+            return code.execute(ps);
 
         } catch (SQLException e) {
             if (e.getSQLState().equals("23505")) {

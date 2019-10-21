@@ -7,6 +7,7 @@ import ru.javawebinar.basejava.util.SqlHelper;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SqlStorage implements Storage {
     private SqlHelper sqlHelper;
@@ -85,7 +86,7 @@ public class SqlStorage implements Storage {
                         rs.getString("full_name").trim()
                 ));
             }
-            return resumes;
+            return resumes.stream().sorted().collect(Collectors.toList());
         });
     }
 
