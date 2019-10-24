@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS contact;
+DROP TABLE IF EXISTS resume;
+
 CREATE TABLE resume
 (
     uuid      CHAR(36) PRIMARY KEY NOT NULL,

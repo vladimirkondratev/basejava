@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 
 public class ResumeTestData {
@@ -7,12 +8,12 @@ public class ResumeTestData {
     public static Resume getResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-//        switch (uuid) {
-//            case "uuid1": {
-//                resume.addContact(ContactType.PHONE, "+7(900) 111-1111");
-//                resume.addContact(ContactType.MAIL, "account@yandex.ru");
-//                resume.addContact(ContactType.SKYPE, "skype.skype");
-//
+        switch (uuid) {
+            case "uuid1": {
+                resume.addContact(ContactType.PHONE, "+7(900) 111-1111");
+                resume.addContact(ContactType.MAIL, "account@yandex.ru");
+                resume.addContact(ContactType.SKYPE, "skype.skype");
+
 //                resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям."));
 //                resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
 //
@@ -85,18 +86,18 @@ public class ResumeTestData {
 //                educationList.add(education1);
 //                educationList.add(education2);
 //                resume.addSection(SectionType.EDUCATION, new OrganizationSection(educationList));
-//                break;
-//            }
-//            case "uuid2":
-//                resume.addContact(ContactType.PHONE, "+71234567890");
-//                break;
-//            case "uuid3":
-//                resume.addContact(ContactType.MAIL, "name@domen.ru");
-//                break;
-//            case "uuid4":
-//                resume.addContact(ContactType.SKYPE, "skype");
-//                break;
-//        }
+                break;
+            }
+            case "uuid2":
+                resume.addContact(ContactType.PHONE, "+71234567890");
+                break;
+            case "uuid3":
+                resume.addContact(ContactType.MAIL, "name@domen.ru");
+                break;
+            case "uuid4":
+                resume.addContact(ContactType.SKYPE, "skype");
+                break;
+        }
         return resume;
     }
 
