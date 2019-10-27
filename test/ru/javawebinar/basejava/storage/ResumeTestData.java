@@ -89,7 +89,7 @@ public class ResumeTestData {
                 break;
             }
             case "uuid2":
-                resume.addContact(ContactType.PHONE, "+71234567890");
+              //  resume.addContact(ContactType.PHONE, "+71234567890");
                 break;
             case "uuid3":
                 resume.addContact(ContactType.MAIL, "name@domen.ru");
