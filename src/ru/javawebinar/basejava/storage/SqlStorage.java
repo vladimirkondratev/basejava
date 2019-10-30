@@ -120,8 +120,7 @@ public class SqlStorage implements Storage {
         String statement = "SELECT COUNT(*) FROM resume";
         return sqlHelper.connectAndExecute(statement, ps -> {
             ResultSet rs = ps.executeQuery();
-            rs.next();
-            return rs.getInt(1);
+            return rs.next() ? rs.getInt(1) : 0;
         });
     }
 
@@ -146,9 +145,10 @@ public class SqlStorage implements Storage {
     }
 
     private void deleteContacts(Connection conn, Resume resume) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid =?")) {
+        sqlHelper.connectAndExecute("DELETE FROM contact WHERE resume_uuid =?", ps -> {
             ps.setString(1, resume.getUuid());
             ps.execute();
-        }
+            return null;
+        });
     }
 }
