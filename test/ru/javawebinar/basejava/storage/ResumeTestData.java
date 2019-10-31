@@ -1,7 +1,9 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResumeTestData {
 
@@ -14,27 +16,27 @@ public class ResumeTestData {
                 resume.addContact(ContactType.MAIL, "account@yandex.ru");
                 resume.addContact(ContactType.SKYPE, "skype.skype");
 
-//                resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям."));
-//                resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
-//
-//                List<String> achievementList = new ArrayList<>();
-//                achievementList.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven.\n" +
-//                        "Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\".\n" +
-//                        "Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
-//                achievementList.add("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio,\n" +
-//                        "DuoSecurity, Google Authenticator, Jira, Zendesk.");
-//                achievementList.add("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, Bonita BPM,\n" +
-//                        "CMIS, LDAP. Разработка приложения управления окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO\n" +
-//                        "аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
-//                resume.addSection(SectionType.ACHIEVEMENT, new ListSection(achievementList));
-//
-//                List<String> qualificationList = new ArrayList<>();
-//                qualificationList.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
-//                qualificationList.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
-//                qualificationList.add("Java Frameworks: Java 8 (Time API, Streams), Guava, Java Executor, MyBatis, Spring (MVC, Security, Data, Clouds, Boot), JPA\n" +
-//                        "(Hibernate, EclipseLink), Guice, GWT(SmartGWT, ExtGWT/GXT), Vaadin, Jasperreports, Apache Commons, Eclipse SWT, JUnit,\n" +
-//                        "Selenium (htmlelements).");
-//                resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualificationList));
+                resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям."));
+                resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
+
+                List<String> achievementList = new ArrayList<>();
+                achievementList.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. " +
+                        "Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". " +
+                        "Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
+                achievementList.add("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio, " +
+                        "DuoSecurity, Google Authenticator, Jira, Zendesk.");
+                achievementList.add("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, Bonita BPM," +
+                        "CMIS, LDAP. Разработка приложения управления окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO" +
+                        "аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
+                resume.addSection(SectionType.ACHIEVEMENT, new ListSection(achievementList));
+
+                List<String> qualificationList = new ArrayList<>();
+                qualificationList.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
+                qualificationList.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
+                qualificationList.add("Java Frameworks: Java 8 (Time API, Streams), Guava, Java Executor, MyBatis, Spring (MVC, Security, Data, Clouds, Boot), JPA " +
+                        "(Hibernate, EclipseLink), Guice, GWT(SmartGWT, ExtGWT/GXT), Vaadin, Jasperreports, Apache Commons, Eclipse SWT, JUnit, " +
+                        "Selenium (htmlelements).");
+                resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualificationList));
 //
 //                List<Organization.Position> periods1 = new ArrayList<>();
 //                periods1.add(new Organization.Position(DateUtil.of(2013, Month.OCTOBER),
@@ -90,12 +92,13 @@ public class ResumeTestData {
             }
             case "uuid2":
               //  resume.addContact(ContactType.PHONE, "+71234567890");
+                resume.addSection(SectionType.OBJECTIVE, new TextSection("Бездельник"));
                 break;
             case "uuid3":
                 resume.addContact(ContactType.MAIL, "name@domen.ru");
                 break;
             case "uuid4":
-                resume.addContact(ContactType.SKYPE, "skype");
+               // resume.addContact(ContactType.SKYPE, "skype");
                 break;
         }
         return resume;
