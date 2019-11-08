@@ -3,6 +3,7 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.sql.SqlHelper;
+import ru.javawebinar.basejava.util.JsonParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -151,16 +152,7 @@ public class SqlStorage implements Storage {
     private void addSection(ResultSet rs, Resume resume) throws SQLException {
         String value = rs.getString("value");
         SectionType type = SectionType.valueOf(rs.getString("type"));
-        switch (type) {
-            case PERSONAL:
-            case OBJECTIVE:
-                resume.addSection(type, new TextSection(value));
-                break;
-            case ACHIEVEMENT:
-            case QUALIFICATIONS:
-                resume.addSection(type, new ListSection(value.split("\n")));
-                break;
-        }
+        resume.addSection(type, JsonParser.read(value, AbstractSection.class));
     }
 
     private void saveContacts(Connection conn, Resume resume) throws SQLException {
@@ -181,17 +173,7 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getUuid());
                 SectionType type = section.getKey();
                 ps.setString(2, type.name());
-                switch (type) {
-                    case PERSONAL:
-                    case OBJECTIVE:
-                        ps.setString(3, ((TextSection) section.getValue()).getText());
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        List<String> items = ((ListSection) section.getValue()).getItems();
-                        ps.setString(3, String.join("\n", items));
-                        break;
-                }
+                ps.setString(3, JsonParser.write(section.getValue(), AbstractSection.class));
                 ps.addBatch();
             }
             ps.executeBatch();

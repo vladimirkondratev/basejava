@@ -6,9 +6,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.*;
 
-/**
- * ru.javawebinar.basejava.model.Resume class
- */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
@@ -18,9 +15,8 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     private String fullName;
 
-    private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-
-    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume() {
     }
@@ -44,6 +40,10 @@ public class Resume implements Comparable<Resume>, Serializable {
         return fullName;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public Map<ContactType, String> getContacts() {
         return contacts;
     }
@@ -56,12 +56,12 @@ public class Resume implements Comparable<Resume>, Serializable {
         return contacts.get(type);
     }
 
-    public void addContact(ContactType type, String value) {
-        contacts.put(type, value);
-    }
-
     public AbstractSection getSection(SectionType type) {
         return sections.get(type);
+    }
+
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
     }
 
     public void addSection(SectionType type, AbstractSection section) {
@@ -93,6 +93,6 @@ public class Resume implements Comparable<Resume>, Serializable {
     public int compareTo(Resume o) {
         return Comparator.comparing(Resume::getFullName)
                 .thenComparing(Resume::getUuid)
-                .compare(this, (Resume) o);
+                .compare(this, o);
     }
 }
