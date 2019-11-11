@@ -65,7 +65,7 @@ a[href^="https://www.linkedin.com"] {
     background: url(../img/lin.png) no-repeat center left;
 }
 
-a[href*="github."] {
+a[href*="https://github.com"] {
     padding-left: 20px !important;
     background: url(../img/gh.png) no-repeat center left;
 }

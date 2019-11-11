@@ -1,4 +1,6 @@
 <%@ page import="ru.javawebinar.basejava.model.ContactType" %>
+<%@ page import="ru.javawebinar.basejava.model.ListSection" %>
+<%@ page import="ru.javawebinar.basejava.model.SectionType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -24,16 +26,31 @@
                 <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContact(type)}"></dd>
             </dl>
         </c:forEach>
-        <h3>Секции:</h3>
-        <input type="text" name="section" size=30 value="1"><br/>
-        <input type="text" name="section" size=30 value="2"><br/>
-        <input type="text" name="section" size=30 value="3"><br/>
+
+        <c:forEach var="type" items="<%=SectionType.values()%>">
+            <c:set var="section" value="${resume.getSection(type)}"/>
+            <c:choose>
+                <c:when test="${type=='OBJECTIVE' || type=='PERSONAL'}">
+                    <dl>
+                        <dt>${type.title}</dt>
+                        <dd><input type="text" name="${type.name()}" size=100 value="${section.text}"></dd>
+                    </dl>
+                </c:when>
+                <c:when test="${type=='ACHIEVEMENT' || type=='QUALIFICATIONS'}">
+                    <dl>
+                        <dt>${type.title}</dt>
+                        <dd><textarea rows="5" cols="100" name="${type.name()}"><c:if
+                                test="${resume.getSection(type) != null}"><jsp:useBean
+                                id="section" type="ru.javawebinar.basejava.model.AbstractSection"/><%=String.join("\n", ((ListSection) section).getItems())%></c:if></textarea></dd>
+                    </dl>
+                </c:when>
+            </c:choose>
+        </c:forEach>
         <hr>
         <button type="submit">Сохранить</button>
         <button onclick="window.history.back()">Отменить</button>
     </form>
 </section>
-<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>
 
