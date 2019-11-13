@@ -13,4 +13,22 @@
         <url-pattern>/resume</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>organizationServlet</servlet-name>
+        <servlet-class>ru.javawebinar.basejava.web.OrganizationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>organizationServlet</servlet-name>
+        <url-pattern>/manageOrganization</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>positionServlet</servlet-name>
+        <servlet-class>ru.javawebinar.basejava.web.PositionServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>positionServlet</servlet-name>
+        <url-pattern>/managePosition</url-pattern>
+    </servlet-mapping>
+
 </web-app>

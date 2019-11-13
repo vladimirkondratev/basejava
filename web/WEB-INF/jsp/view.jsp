@@ -45,13 +45,20 @@
                 <h2>${type.title}</h2>
                 <table cellpadding="2">
                     <c:forEach var="organization" items="<%=((OrganizationSection) section).getItems()%>">
+                        <tr>
+                            <td colspan="2">
+                                <c:choose>
+                                    <c:when test="${empty organization.homepage.url}">
+                                        <h3>${organization.homepage.name}</h3>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h3><a href="${organization.homepage.url}">${organization.homepage.name}</a></h3>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
                         <c:forEach var="position" items="${organization.positions}">
                             <jsp:useBean id="position" type="ru.javawebinar.basejava.model.Organization.Position"/>
-                            <tr>
-                                <td colspan="2">
-                                    <h3><a href="${organization.homepage.url}">${organization.homepage.name}</a></h3>
-                                </td>
-                            </tr>
                             <tr>
                                 <td width="20%" style="vertical-align: top"> <%=DateUtil.format(position.getStartDate())%> - <%=DateUtil.format(position.getEndDate())%>
                                 </td>
