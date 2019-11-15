@@ -46,7 +46,7 @@ public class ResumeServlet extends HttpServlet {
         for (SectionType type : SectionType.values()) {
             String value = request.getParameter(type.name());
             String[] values = request.getParameterValues(type.name());
-            if ((value == null || "".equals(value)) && values == null) {
+            if ((value == null || value.trim().length() == 0) && (values == null || values.length < 2)) {
                 resume.getSections().remove(type);
             } else {
                 switch (type) {
@@ -72,8 +72,9 @@ public class ResumeServlet extends HttpServlet {
                             String[] descriptions = request.getParameterValues(prefix + "description");
                             if (titles != null) {
                                 for (int j = 0; j < titles.length; j++) {
-                                    positions.add(new Organization.Position(DateUtil.format(startDates[j]), DateUtil.format(endDates[j]), titles[j], descriptions[j]));
-
+                                    if (titles[j].trim().length() != 0) {
+                                        positions.add(new Organization.Position(DateUtil.format(startDates[j]), DateUtil.format(endDates[j]), titles[j], descriptions[j]));
+                                    }
                                 }
                             }
                             organizations.add(new Organization(new Link(name, urls[i]), positions));
