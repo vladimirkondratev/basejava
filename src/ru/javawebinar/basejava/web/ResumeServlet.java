@@ -111,7 +111,8 @@ public class ResumeServlet extends HttpServlet {
                 resume = storage.get(uuid);
                 break;
             case "create":
-                resume = new Resume();
+                resume = new Resume("Новое имя");
+                storage.save(resume);
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
