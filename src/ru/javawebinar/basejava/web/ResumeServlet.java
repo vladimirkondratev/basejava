@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
@@ -64,20 +65,22 @@ public class ResumeServlet extends HttpServlet {
                         String[] urls = request.getParameterValues(type.name() + "homepage");
                         for (int i = 0; i < values.length; i++) {
                             String name = values[i];
-                            List<Organization.Position> positions = new ArrayList<>();
-                            String prefix = type.name() + i;
-                            String[] titles = request.getParameterValues(prefix + "title");
-                            String[] startDates = request.getParameterValues(prefix + "startDate");
-                            String[] endDates = request.getParameterValues(prefix + "endDate");
-                            String[] descriptions = request.getParameterValues(prefix + "description");
-                            if (titles != null) {
-                                for (int j = 0; j < titles.length; j++) {
-                                    if (titles[j].trim().length() != 0) {
-                                        positions.add(new Organization.Position(DateUtil.format(startDates[j]), DateUtil.format(endDates[j]), titles[j], descriptions[j]));
+                            if (!(name == null || name.trim().length() == 0)) {
+                                List<Organization.Position> positions = new ArrayList<>();
+                                String prefix = type.name() + i;
+                                String[] titles = request.getParameterValues(prefix + "title");
+                                String[] startDates = request.getParameterValues(prefix + "startDate");
+                                String[] endDates = request.getParameterValues(prefix + "endDate");
+                                String[] descriptions = request.getParameterValues(prefix + "description");
+                                if (titles != null) {
+                                    for (int j = 0; j < titles.length; j++) {
+                                        if (titles[j].trim().length() != 0) {
+                                            positions.add(new Organization.Position(DateUtil.parse(startDates[j]), DateUtil.parse(endDates[j]), titles[j], descriptions[j]));
+                                        }
                                     }
                                 }
+                                organizations.add(new Organization(new Link(name, urls[i]), positions));
                             }
-                            organizations.add(new Organization(new Link(name, urls[i]), positions));
                         }
                         resume.addSection(type, new OrganizationSection(organizations));
                         break;
@@ -108,12 +111,30 @@ public class ResumeServlet extends HttpServlet {
                 response.sendRedirect("resume");
                 return;
             case "view":
-            case "edit":
                 resume = storage.get(uuid);
                 break;
+            case "edit":
             case "create":
-                resume = new Resume("Новое имя");
-                storage.save(resume);
+                if ("edit".equals(action)) {
+                    resume = storage.get(uuid);
+                } else {
+                    resume = new Resume();
+                }
+                for (SectionType sectionType : Arrays.asList(SectionType.EXPERIENCE, SectionType.EDUCATION)) {
+                    OrganizationSection section = (OrganizationSection) resume.getSection(sectionType);
+                    if (section == null) {
+                        section = new OrganizationSection(new ArrayList());
+                    }
+                    section.getItems().add(new Organization(new Link(), new ArrayList<>()));
+                    for (Organization organization : section.getItems()) {
+                        List<Organization.Position> positions = new ArrayList<>();
+                        positions.addAll(organization.getPositions());
+                        positions.add(new Organization.Position());
+                        organization.setPositions(positions);
+                    }
+                    resume.addSection(sectionType, section);
+                }
+
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");

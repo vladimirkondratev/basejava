@@ -53,16 +53,13 @@
                 <c:when test="${type=='EXPERIENCE' || type=='EDUCATION'}">
                     <br>
                     <b><h3>${type.title}</h3></b>
-                    <a href="manageOrganization?uuid=${resume.uuid}&type=${type.name()}">Добавить организацию</a><br><br>
                     <br>
                     <c:if test="${resume.getSection(type) != null}">
                         <c:set var="section2" value="${resume.getSection(type)}"/>
                         <jsp:useBean id="section2" type="ru.javawebinar.basejava.model.AbstractSection"/>
-
                         <c:forEach var="organization" items="<%=((OrganizationSection) section2).getItems()%>"
                                    varStatus="counterOrg">
                             <div class="div_organization">
-                                <a href="manageOrganization?uuid=${resume.uuid}&type=${type.name()}&organization=${organization.homepage.name}&action=delete">Удалить организацию</a><br>
                                 <dl>
                                     <dt><b>Организация</b></dt>
                                     <dd><input type="text" name="${type}" size=100
@@ -73,14 +70,10 @@
                                     <dd><input type="text" name="${type}homepage" size=30
                                                value="${organization.homepage.url}"></dd>
                                 </dl>
-
-                                <a href="managePosition?uuid=${resume.uuid}&type=${type.name()}&organization=${organization.homepage.name}">Добавить позицию/должность</a><br><br>
-
                                 <c:forEach var="position" items="${organization.positions}" varStatus="counterPos">
                                     <jsp:useBean id="position"
                                                  type="ru.javawebinar.basejava.model.Organization.Position"/>
                                     <div>
-                                        <a href="managePosition?uuid=${resume.uuid}&type=${type.name()}&organization=${organization.homepage.name}&position=${position.title}&action=delete">Удалить позицию/должность</a><br>
                                         <dl>
                                             <dt>Позиция/Должность</dt>
                                             <dd><input type="text" name="${type}${counterOrg.index}title" size=30
