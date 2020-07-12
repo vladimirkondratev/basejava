@@ -1,6 +1,6 @@
 # Разработка Web приложения "База данных резюме"
 ## Используемые технологии:
-  -  Java 8, GitHib/Git, Сервлеты, JSP, JSTL, Tomcat, JUnit, PostgreSQL, GSON, JAXB  
+  -  Java 8, GitHub/Git, Сервлеты, JSP, JSTL, Tomcat, JUnit, PostgreSQL, GSON, JAXB  
 ## Хранение резюме
    -  в памяти на основе массива, отсортированного массива, списка и ассоциированного массива (Map)
    -  в файловой системе (File API и <a href="http://www.quizful.net/post/java-nio-tutorial">Java 7 NIO File API</a>)
